@@ -9,7 +9,7 @@
 			"name": "SampleWork",
 			"item": [
 				{
-					"name": "Sample",
+					"name": "Sample - Valid Request",
 					"event": [
 						{
 							"listen": "test",
@@ -86,27 +86,39 @@
 									"    \"url\"\r",
 									"  ]\r",
 									"};\r",
-									"var jsonResponse = pm.response.json();\r",
-									"//Verify response time does not exceed 3ms\r",
-									"pm.test(\"Response time is less than 300ms\", () => {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
-									"});\r",
 									"\r",
-									"//Verify response data \r",
-									"pm.test(\"Diameter object is greater than 0\", ()=> {\r",
-									"    pm.expect(jsonData.climate).to.contain('tropical');\r",
-									"});\r",
-									"\r",
-									"//Verify response header\r",
-									"pm.test(\"Etag is present\", () => {\r",
-									"    pm.response.to.have.header(\"ETag\");\r",
-									"});\r",
-									"\r",
-									"//Verify JSON schema\r",
+									"// Verify JSON schema\r",
 									"pm.test(\"JSON schema is valid\", () => {\r",
-									"    pm.expect(tv4.validate(jsonResponse, schemaPlan)).to.be.true;\r",
+									"    pm.expect(tv4.validate(jsonData, schemaPlan)).to.be.true;\r",
 									"})\r",
-									""
+									"\r",
+									"// Verify response time does not exceed 3ms\r",
+									"pm.test(\"Response time is less than 3ms\", () => {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3);\r",
+									"});\r",
+									"\r",
+									"// Verify response data \r",
+									"pm.test(\"Response data verified\", ()=> {\r",
+									"    pm.expect(jsonData.climate).to.contain('tropical');\r",
+									"    pm.expect(jsonData.name).to.eql(\"Yavin IV\");\r",
+									"    pm.expect(jsonData.diameter).to.eql(\"10200\");\r",
+									"    pm.expect(jsonData.residents).to.be.empty;\r",
+									"    pm.expect(jsonData.films).to.be.not.empty;\r",
+									"});\r",
+									"\r",
+									"// Verify response header\r",
+									"pm.test(\"Response headers verified\", () => {\r",
+									"    pm.response.to.have.header(\"Server\");\r",
+									"    pm.response.to.have.header(\"Date\");\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Vary\");\r",
+									"    pm.response.to.have.header(\"X-Frame-Options\");\r",
+									"    pm.response.to.have.header(\"ETag\");\r",
+									"    pm.response.to.have.header(\"Allow\");\r",
+									"    pm.response.to.have.header(\"Strict-Transport-Security\");    \r",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -116,11 +128,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://swapi.dev/api/planets/3",
-							"protocol": "https",
+							"raw": "{{url}}/api/planets/3",
 							"host": [
-								"swapi",
-								"dev"
+								"{{url}}"
 							],
 							"path": [
 								"api",
@@ -191,22 +201,33 @@
 			"item": [
 				{
 					"name": "MockTest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verify the name object is not Yavin IV\r",
+									"pm.test(\"The name object is changed\", ()=> {\r",
+									"    pm.expect(pm.response.json().name).to.not.eql(\"Yavin IV\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://c9e56645-6747-4471-ad8d-e258c4416f18.mock.pstmn.io/api/planets/2",
-							"protocol": "https",
+							"raw": "{{mock}}/api/planets/3",
 							"host": [
-								"c9e56645-6747-4471-ad8d-e258c4416f18",
-								"mock",
-								"pstmn",
-								"io"
+								"{{mock}}"
 							],
 							"path": [
 								"api",
 								"planets",
-								"2"
+								"3"
 							]
 						}
 					},
