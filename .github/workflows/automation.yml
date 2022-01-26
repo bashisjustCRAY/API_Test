@@ -22,15 +22,16 @@ jobs:
        npm install -g newman
        npm install -g newman-reporter-htmlextra
 
-    # Make directory to upload the test results
-    - name: Make Directory for results
-      run: mkdir -p testResults
+#     # Make directory to upload the test results
+#     - name: Make Directory for results
+#       run: mkdir -p testResults
 
 
     # Run the POSTMAN collection
     - name: Run POSTMAN collection
       run: |
-       newman run Paystack.postman_collection.json -e Paystack_Env.postman_environment.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+       newman run Paystack.postman_collection.json -e Paystack_Env.postman_environment.json -r cli,json
+#    htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
 
     # Upload the contents of Test Results directory to workspace
     - name: Output the run Details
