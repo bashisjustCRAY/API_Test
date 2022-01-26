@@ -94,7 +94,7 @@
 									"\r",
 									"// Verify response time does not exceed 3ms\r",
 									"pm.test(\"Response time is less than 3ms\", () => {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(30000);\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3);\r",
 									"});\r",
 									"\r",
 									"// Verify response data \r",
